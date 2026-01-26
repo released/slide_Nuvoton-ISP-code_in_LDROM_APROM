@@ -1,0 +1,712 @@
+<!DOCTYPE html><html><head>
+      <title>index</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css">
+      
+      
+      <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.min.js"></script>
+      
+      
+      <style>
+      code[class*=language-],pre[class*=language-]{color:#333;background:0 0;font-family:Consolas,"Liberation Mono",Menlo,Courier,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.4;-moz-tab-size:8;-o-tab-size:8;tab-size:8;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:.8em;overflow:auto;border-radius:3px;background:#f5f5f5}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal;background:#f5f5f5}.token.blockquote,.token.comment{color:#969896}.token.cdata{color:#183691}.token.doctype,.token.macro.property,.token.punctuation,.token.variable{color:#333}.token.builtin,.token.important,.token.keyword,.token.operator,.token.rule{color:#a71d5d}.token.attr-value,.token.regex,.token.string,.token.url{color:#183691}.token.atrule,.token.boolean,.token.code,.token.command,.token.constant,.token.entity,.token.number,.token.property,.token.symbol{color:#0086b3}.token.prolog,.token.selector,.token.tag{color:#63a35c}.token.attr-name,.token.class,.token.class-name,.token.function,.token.id,.token.namespace,.token.pseudo-class,.token.pseudo-element,.token.url-reference .token.variable{color:#795da3}.token.entity{cursor:help}.token.title,.token.title .token.punctuation{font-weight:700;color:#1d3e81}.token.list{color:#ed6a43}.token.inserted{background-color:#eaffea;color:#55a532}.token.deleted{background-color:#ffecec;color:#bd2c00}.token.bold{font-weight:700}.token.italic{font-style:italic}.language-json .token.property{color:#183691}.language-markup .token.tag .token.punctuation{color:#333}.language-css .token.function,code.language-css{color:#0086b3}.language-yaml .token.atrule{color:#63a35c}code.language-yaml{color:#183691}.language-ruby .token.function{color:#333}.language-markdown .token.url{color:#795da3}.language-makefile .token.symbol{color:#795da3}.language-makefile .token.variable{color:#183691}.language-makefile .token.builtin{color:#0086b3}.language-bash .token.keyword{color:#0086b3}pre[data-line]{position:relative;padding:1em 0 1em 3em}pre[data-line] .line-highlight-wrapper{position:absolute;top:0;left:0;background-color:transparent;display:block;width:100%}pre[data-line] .line-highlight{position:absolute;left:0;right:0;padding:inherit 0;margin-top:1em;background:hsla(24,20%,50%,.08);background:linear-gradient(to right,hsla(24,20%,50%,.1) 70%,hsla(24,20%,50%,0));pointer-events:none;line-height:inherit;white-space:pre}pre[data-line] .line-highlight:before,pre[data-line] .line-highlight[data-end]:after{content:attr(data-start);position:absolute;top:.4em;left:.6em;min-width:1em;padding:0 .5em;background-color:hsla(24,20%,50%,.4);color:#f4f1ef;font:bold 65%/1.5 sans-serif;text-align:center;vertical-align:.3em;border-radius:999px;text-shadow:none;box-shadow:0 1px #fff}pre[data-line] .line-highlight[data-end]:after{content:attr(data-end);top:auto;bottom:.4em}html body{font-family:'Helvetica Neue',Helvetica,'Segoe UI',Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ol,html body>ul{margin-bottom:16px}html body ol,html body ul{padding-left:2em}html body ol.no-list,html body ul.no-list{padding:0;list-style-type:none}html body ol ol,html body ol ul,html body ul ol,html body ul ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:700;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::after,html body code::before{letter-spacing:-.2em;content:'\00a0'}html body pre>code{padding:0;margin:0;word-break:normal;white-space:pre;background:0 0;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:after,html body pre code:before,html body pre tt:after,html body pre tt:before{content:normal}html body blockquote,html body dl,html body ol,html body p,html body pre,html body ul{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body code,html body pre{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview ul{list-style:disc}.markdown-preview ul ul{list-style:circle}.markdown-preview ul ul ul{list-style:square}.markdown-preview ol{list-style:decimal}.markdown-preview ol ol,.markdown-preview ul ol{list-style-type:lower-roman}.markdown-preview ol ol ol,.markdown-preview ol ul ol,.markdown-preview ul ol ol,.markdown-preview ul ul ol{list-style-type:lower-alpha}.markdown-preview .newpage,.markdown-preview .pagebreak{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center!important}.markdown-preview:not([data-for=preview]) .code-chunk .code-chunk-btn-group{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .status{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .output-div{margin-bottom:16px}.markdown-preview .md-toc{padding:0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link div,.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}.markdown-preview .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0;min-height:100vh}@media screen and (min-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{font-size:14px!important;padding:1em}}@media print{html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc{padding:0 16px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link div,html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% - 300px);padding:2em calc(50% - 457px - 300px / 2);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+      <!-- The content below will be included at the end of the <head> element. --><script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    // your code here
+  });
+</script></head><body for="html-export">
+    
+    
+      <div class="crossnote markdown-preview  ">
+      
+<p><a href="https://released.github.io/">return to index</a></p>
+<p><a id="article_top" href=""></a></p>
+<h1 id="nuvoton-m2a23--uart-isp-training-custom-flow">Nuvoton M2A23 – UART ISP Training Custom Flow </h1>
+<blockquote>
+<p>This training material is written <strong>to match the actual reference project</strong><br>
+<strong>M2A23BSP_ISP_UART_APROM</strong>, including its <strong>custom ISP flow split into <code>isp_config.c</code></strong>.</p>
+</blockquote>
+<hr>
+<h2 id="reference-project">Reference Project </h2>
+<p>This training material is based on the <strong>below reference project</strong>:</p>
+<ul>
+<li><a href="https://github.com/released/M2A23BSP_ISP_UART_APROM">https://github.com/released/M2A23BSP_ISP_UART_APROM</a></li>
+</ul>
+<p>All memory layout, ISP flow, CRC strategy, and tool settings described below are<br>
+<strong>directly derived from this repository</strong>.</p>
+<h2 id="agenda">Agenda </h2>
+<ul>
+<li>System overview Flash layout + dual UART</li>
+<li>Boot code LDROM + APROM-end flow — <strong>custom ISP flow</strong></li>
+<li>Application code flow</li>
+<li>Build &amp; image generation</li>
+<li>Tool settings ICP / ISP</li>
+<li>Runtime notes &amp; pitfalls</li>
+</ul>
+<hr>
+<p><a id="article_overview" href=""></a></p>
+<h2 id="1-system-overview">1. System overview </h2>
+<h3 id="flash-allocation-actual-project">Flash allocation actual project </h3>
+<blockquote>
+<p><strong>Important !!!</strong><br>
+<strong>Address is configurable</strong></p>
+<ul>
+<li><code>APROM Application</code> start / size</li>
+<li><code>APROM Boot extension</code> base address example: <code>0x1E000</code></li>
+</ul>
+<p>These addresses are <strong>project-dependent</strong> and <strong>NOT fixed by hardware</strong>.<br>
+<strong>must</strong> adjust them according to:</p>
+<ul>
+<li>Application code size requirement</li>
+<li>Bootloader code feature size</li>
+</ul>
+<p>The values used in this training <code>0x1E000</code>, <code>0x1DFFC</code> are <strong>one validated reference only</strong>.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Region</th>
+<th>Address</th>
+<th>Size</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>APROM Application</td>
+<td><code>0x0000_0000 ~ 0x0001_DFFF</code></td>
+<td><code>0x1E000</code></td>
+<td>app code</td>
+</tr>
+<tr>
+<td>APROM checksum</td>
+<td><code>0x0001_DFFC</code></td>
+<td>4 bytes</td>
+<td>app code checksum address (CRC32)</td>
+</tr>
+<tr>
+<td>Boot code ext in APROM</td>
+<td><code>0x0001_E000 ~ 0x0001_FFFF</code></td>
+<td>8 KB</td>
+<td>boot code extension</td>
+</tr>
+<tr>
+<td>Boot code inLDROM</td>
+<td><code>0x0010_0000 ~ 0x0010_0FFF</code></td>
+<td>4 KB</td>
+<td>boot code</td>
+</tr>
+</tbody>
+</table>
+<p><img src="img/FLASH_calculate.jpg" alt=""></p>
+<h3 id="uart-assignment-hard-separation">UART assignment hard separation </h3>
+<table>
+<thead>
+<tr>
+<th>UART</th>
+<th>Function</th>
+<th>Used in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UART0 PB12/PB13</td>
+<td>ISP protocol</td>
+<td>Boot only , to upgrade app code</td>
+</tr>
+<tr>
+<td>UART1 PA8/PA9</td>
+<td>printf / progress log</td>
+<td>Boot + App</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="article_boot_flow" href=""></a></p>
+<h2 id="2-boot-code-flow-ldrom--aprom-end">2. Boot code flow LDROM + APROM-end </h2>
+<h3 id="source-level-structure-important">Source-level structure important </h3>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>main.c
+ └─ main
+    ├─ SYS_Init
+    ├─ ISP_Init
+    ├─ ISP_check_app
+    └─ while1
+        └─ ISP_process
+
+isp_config.c   ← ★ Custom ISP state &amp; policy
+isp_user.c     ← UART RX / CMD handler
+</code></pre><h3 id="boot-code-flow">Boot code flow </h3>
+<div class="mermaid">flowchart TD
+    A[Reset / Power-on] --&gt; B[SYS_Init + UART Init UART0=ISP, UART1=Log]
+    B --&gt; C[ISP_Init 
+    FMC_Open + ISP Enable]
+    C --&gt; D[ISP_check_app]
+    D --&gt; E{Verify app CRC32 APROM 0..size-4 vs last word}
+    E --&gt;|YES| F[Jump to APROM VECMAP=APROM start CPU reset]
+    E --&gt;|NO| G[Stay in bootloader]
+    G --&gt; H[ISP_process]
+    H --&gt; I[CMD_CONNECT?]
+    I --&gt;|YES| J[Receive packet 64B ParseCmd]
+    J --&gt; K[Execute command Update/Erase/Run/Reset...]
+    K --&gt;|CMD_UPDATE_APROM| L[WriteData]
+    L --&gt; M[Update progress by UART1 log]
+    M --&gt; H    
+    K--&gt;|FINISH : CMD_RUN_APROM| N[SYS_ResetChip restart boot]
+</div><p><img src="img/LDROM_upgrade_finish.jpg" alt=""></p>
+<h3 id="key-point-training-emphasis">Key point training emphasis </h3>
+<ul>
+<li><strong>Protocol parsing and policy are separated</strong>
+<ul>
+<li><code>isp_user.c</code> → packet handling</li>
+<li><code>isp_config.c</code> → CRC check / boot decision / ISP behavior</li>
+</ul>
+</li>
+<li>UART logging is <strong>post-action only</strong>, never <strong>execute printf</strong> during RX parsing</li>
+</ul>
+<hr>
+<p><a id="article_app_flow" href=""></a></p>
+<h2 id="3-application-code-flow">3. Application code flow </h2>
+<div class="mermaid">flowchart TD
+    A[App Reset Vector @ 0x0000_0000] --&gt; B[System init peripherals, tasks]
+    B --&gt; C[Normal run]
+    C --&gt; D{Enter update mode? button/command/flag}
+    D --&gt;|Yes| E[Erase checksum @ 0x1DFFC]
+    D --&gt;|NO|C
+    E --&gt; F[SYS_ResetChip]
+    F --&gt; G[return to Boot
+    compare checksum CRC FAIL → ISP mode]
+</div><h3 id="practical-triggers-from-reference">Practical triggers from reference </h3>
+<ul>
+<li>Press <strong>'1'</strong> → erase checksum (under app code)</li>
+</ul>
+<p><img src="img/APROM_erase_checksum.jpg" alt=""></p>
+<ul>
+<li>Press <strong>'Z' / 'z'</strong> → reset to LDROM</li>
+</ul>
+<p><img src="img/APROM_press_Z_to_LDROM.jpg" alt=""></p>
+<ul>
+<li>Press <strong>nRESET</strong> on EVM</li>
+</ul>
+<p><img src="img/APROM_press_nRESET_to_LDROM.jpg" alt=""></p>
+<hr>
+<p><a id="article_build" href=""></a></p>
+<h3 id="scatter-file-in-boot-code-uart_iapsct--must-use-as-is">Scatter file in Boot code (uart_iap.sct – MUST use as-is) </h3>
+<p>Boot code project <strong>uses a single scatter file</strong>: <code>uart_iap.sct</code>.</p>
+<ul>
+<li>Adjust <strong>only the address/size macros</strong> if project memory layout changes</li>
+</ul>
+<p>The linker layout for:</p>
+<ul>
+<li>LDROM</li>
+<li>APROM boot extension</li>
+</ul>
+<p>is <strong>centrally defined in <code>uart_iap.sct</code></strong> to guarantee consistency between<br>
+bootloader and application images.</p>
+<p><img src="img/LDROM_KEIL_sct.jpg" alt=""></p>
+<h2 id="4-build--image-generation">4. Build &amp; image generation </h2>
+<h3 id="keil-targets-recommended">Keil targets recommended </h3>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LDROM_BOOT</td>
+<td><code>LDROM_Bootloader.bin</code></td>
+</tr>
+<tr>
+<td>APROM_BOOT_EXT</td>
+<td><code>APROM_Bootloader.bin</code> @ <code>0x1E000</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="scatter-file-for-boot-code">Scatter file for boot code </h3>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>LOAD_ROM_1  <span class="token number">0x100000</span> <span class="token number">0x1000</span>
+<span class="token punctuation">{</span>
+	LDROM_Bootloader<span class="token punctuation">.</span>bin  <span class="token number">0x100000</span> <span class="token number">0x1000</span>
+	<span class="token punctuation">{</span>
+		startup_m2a23<span class="token punctuation">.</span><span class="token function">o</span> <span class="token punctuation">(</span>RESET<span class="token punctuation">,</span> <span class="token operator">+</span>FIRST<span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">ANY</span> <span class="token punctuation">(</span><span class="token operator">+</span>RO<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	
+	SRAM  <span class="token number">0x20000000</span> <span class="token number">0x6000</span>
+	<span class="token punctuation">{</span>
+		<span class="token operator">*</span> <span class="token punctuation">(</span><span class="token operator">+</span>RW<span class="token punctuation">,</span> <span class="token operator">+</span>ZI<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+LOAD_ROM_2  <span class="token number">0x1E000</span> <span class="token number">0x2000</span>
+<span class="token punctuation">{</span>
+	APROM_Bootloader<span class="token punctuation">.</span>bin  <span class="token number">0x1E000</span> <span class="token number">0x2000</span>
+	<span class="token punctuation">{</span>
+        <span class="token punctuation">.</span><span class="token function">ANY</span> <span class="token punctuation">(</span><span class="token operator">+</span>RO<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><h3 id="checksum-strategy-actual-project">Checksum strategy actual project </h3>
+<ul>
+<li>CRC32 over: <code>0x0000_0000 ~ 0x0001_DFFB</code></li>
+<li>Stored at: <code>0x0001_DFFC</code></li>
+<li>Boot compares SW CRC32 vs stored value</li>
+</ul>
+<hr>
+<p><a id="article_tools" href=""></a></p>
+<h2 id="5-tool-settings">5. Tool settings </h2>
+<h3 id="icp-tool-mandatory-first-step">ICP tool mandatory first step </h3>
+<ul>
+<li>Program:
+<ul>
+<li><code>LDROM_Bootloader.bin</code> → LDROM</li>
+<li><code>APROM_Bootloader.bin</code> → APROM @ <code>0x1E000</code></li>
+</ul>
+</li>
+</ul>
+<p><img src="img/LDROM_ICP_Update.jpg" alt=""></p>
+<ul>
+<li>CONFIG:
+<ul>
+<li><strong>Boot from LDROM WITH IAP</strong></li>
+</ul>
+</li>
+</ul>
+<p><img src="img/LDROM_ICP_Config.jpg" alt=""></p>
+<h3 id="isp-tool-uart">ISP tool UART </h3>
+<ul>
+<li><strong>UART COM PORT</strong></li>
+<li>Select <strong>APROM</strong> and <strong>Reset &amp; Run</strong></li>
+<li>During update:
+<ul>
+<li>Progress bar shown on UART1</li>
+<li>ISP protocol on UART0 only</li>
+</ul>
+</li>
+</ul>
+<p><img src="img/boot_from_LDROM_to_APROM.jpg" alt=""></p>
+<hr>
+<p><a id="article_log" href=""></a></p>
+<h2 id="6-uart-log--progress-bar">6. UART log &amp; progress bar </h2>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">LDROM_DEBUG</span><span class="token expression"><span class="token punctuation">(</span>format<span class="token punctuation">,</span> args<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span> 		<span class="token function">printf</span><span class="token punctuation">(</span></span><span class="token string">"\033[1;36m"</span> <span class="token string">"[LDROM]"</span> <span class="token expression">format </span><span class="token string">"\033[0m"</span><span class="token expression"><span class="token punctuation">,</span> </span><span class="token punctuation">##</span><span class="token expression">args<span class="token punctuation">)</span></span></span>
+
+</code></pre><p>Progress bar width=10:</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>[LDROM] [#####-----] 50%
+</code></pre><ul>
+<li>Printed <strong>after WriteData only</strong></li>
+</ul>
+<hr>
+<p><a id="article_summary" href=""></a></p>
+<h2 id="7-summary-training-takeaway">7. Summary training takeaway </h2>
+<ul>
+<li>Boot is <strong>policy-driven</strong> <code>isp_config.c</code></li>
+<li>Application controls update entry by <strong>checksum invalidation</strong></li>
+</ul>
+<p><img src="img/LDROM_checksum_err.jpg" alt=""></p>
+<ul>
+<li>Dual UART avoids ISP/log interference</li>
+<li>CRC32 is the single source of truth for boot decision</li>
+</ul>
+<hr>
+<h1 id="appendix-extended-build--tool-details">Appendix: Extended Build / Tool Details </h1>
+<p><a id="appendix_top" href=""></a></p>
+<h1 id="agenda-1">Agenda </h1>
+<ul>
+<li>Boot code in LDROM,APROM image generation</li>
+<li>ISP tool operation</li>
+<li>SRecord post-build merge + CRC32</li>
+</ul>
+<hr>
+<p><a id="article_split_binary" href=""></a></p>
+<h1 id="boot-code-split-into-2-binaries-ldrom--aprom-end--0x1e000">Boot code: split into 2 binaries LDROM + APROM end @ 0x1E000 </h1>
+<h2 id="why-split">Why split? </h2>
+<ul>
+<li><strong>LDROM size is limited</strong> M2A23 LDROM is 4 KB, but training bootloader often needs:
+<ul>
+<li>protocol + CRC32 + log + timeouts + safety checks</li>
+</ul>
+</li>
+</ul>
+<h2 id="layout-default">layout default </h2>
+<ul>
+<li><code>APP</code>: <code>0x0000_0000</code> ~ <code>0x0001_DFFF</code>  0x1E000 bytes</li>
+<li><code>LDROM ext in APROM</code>: <code>0x0001_E000</code> ~ <code>APROM_END</code>  boot extension, fixed address</li>
+<li><code>LDROM</code>: device LDROM region 4 KB</li>
+</ul>
+<h2 id="output-artifacts">output artifacts </h2>
+<ul>
+<li><code>LDROM_Bootloader.bin</code> boot code stage-1</li>
+<li><code>APROM_Bootloader.bin</code> boot code stage-2, linked at APROM@0x1E000</li>
+<li><code>APROM_application.bin</code> app code linked at 0x0000_0000, size ≤ 0x1E000, includes CRC word</li>
+</ul>
+<p><img src="img/APROM_KEIL_output_file.jpg" alt=""></p>
+<p><a href="#article_top">back to top</a></p>
+<hr>
+<p><a id="article_isp_tool" href=""></a></p>
+<h1 id="isp-tool-settings-uart-isp-update">ISP tool settings UART ISP update </h1>
+<h2 id="typical-steps-uart">Typical steps UART </h2>
+<p>Connect ISP UART UART0 (target PCB) to PC USB-to-UART (UART bride) , Open ISP tool (SW)</p>
+<ol>
+<li>Select UART port &amp; baud rate</li>
+<li>Click “Connect” ( if MCU under boot mode , will stay with connected)</li>
+<li>Load image:
+<ul>
+<li>APROM: load <code>APROM_application.bin</code></li>
+</ul>
+</li>
+<li>Select <code>APROM</code></li>
+<li>Select <code>Reset and Run</code></li>
+<li>execute Program <code>Start</code></li>
+</ol>
+<p><img src="img/ISP_connect.jpg" alt=""></p>
+<ol start="7">
+<li>under ISP code tool , during upgrade application code</li>
+</ol>
+<p><img src="img/ISP_during_update.jpg" alt=""></p>
+<ol start="8">
+<li>under boot code , during upgrade application code</li>
+</ol>
+<p><img src="img/LDROM_during_upgrade.jpg" alt=""></p>
+<h2 id="notes">Notes </h2>
+<ul>
+<li>Bootloader may have a timeout window; connect sequence matters.</li>
+<li>After update, ensure CRC word is correct; otherwise boot will stay in ISP.</li>
+</ul>
+<p><a href="#article_top">back to top</a></p>
+<hr>
+<p><a id="article_srecord" href=""></a></p>
+<h1 id="srecord-settings-merge--crc32-append">SRecord settings merge + CRC32 append </h1>
+<h2 id="use-cases">Use cases </h2>
+<ul>
+<li>Fill holes with 0xFF</li>
+<li>KEIL setting : after compile , generate checksum with by batch file<br>
+<img src="img/APROM_KEIL_checksum_calculate.jpg" alt=""><br>
+<img src="img/APROM_SRecord_cmd_file.jpg" alt=""></li>
+</ul>
+<p><strong>generateChecksum.bat</strong></p>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>@echo off
+setlocal EnableDelayedExpansion
+
+<span class="token operator">::</span> MODIFY checksum_config<span class="token punctuation">.</span>cmd only
+call checksum_config<span class="token punctuation">.</span>cmd
+
+<span class="token operator">::</span> DO NOT EDIT checksum_flow_gen<span class="token punctuation">.</span>cmd
+<span class="token operator">::</span> It is <span class="token keyword keyword-auto">auto</span><span class="token operator">-</span>generated every build
+<span class="token operator">::</span> generate srec script with expanded <span class="token function">values</span>
+<span class="token punctuation">(</span>
+echo obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary
+echo <span class="token operator">-</span>crop <span class="token operator">%</span>APP_START<span class="token operator">%</span> <span class="token operator">%</span>APP_CRC_END<span class="token operator">%</span>
+echo <span class="token operator">-</span>fill <span class="token number">0xFF</span> <span class="token operator">%</span>APP_START<span class="token operator">%</span> <span class="token operator">%</span>APP_CRC_END<span class="token operator">%</span>
+echo <span class="token operator">-</span>crc32<span class="token operator">-</span>l<span class="token operator">-</span>e <span class="token operator">%</span>CRC_POS<span class="token operator">%</span>
+echo <span class="token operator">-</span>crop <span class="token operator">%</span>CRC_POS<span class="token operator">%</span> <span class="token operator">%</span>CRC_END<span class="token operator">%</span>
+<span class="token punctuation">)</span> <span class="token operator">&gt;</span> checksum_flow_gen<span class="token punctuation">.</span>cmd
+
+<span class="token operator">::</span> dump checksum
+srec_cat @checksum_flow_gen<span class="token punctuation">.</span>cmd <span class="token operator">-</span>Output <span class="token operator">-</span> <span class="token operator">-</span>HEX_Dump
+
+<span class="token operator">::</span> update binary
+srec_cat @checksum_flow_gen<span class="token punctuation">.</span>cmd <span class="token operator">^</span>
+    obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary <span class="token operator">^</span>
+    <span class="token operator">-</span>fill <span class="token number">0xFF</span> <span class="token operator">%</span>APP_START<span class="token operator">%</span> <span class="token operator">%</span>APP_CRC_END<span class="token operator">%</span> <span class="token operator">^</span>
+    <span class="token operator">-</span>Output obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary
+
+<span class="token operator">::</span> generate hex
+srec_cat obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary <span class="token operator">^</span>
+    <span class="token operator">-</span>Output obj\APROM_application<span class="token punctuation">.</span>hex <span class="token operator">-</span>intel
+
+</code></pre><p><strong>checksum_flow.cmd</strong> <mark>(the only file need to modify)</mark></p>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code><span class="token operator">::</span> <span class="token operator">==</span><span class="token operator">==</span><span class="token operator">=</span> Application layout configuration <span class="token operator">==</span><span class="token operator">==</span><span class="token operator">=</span>
+
+<span class="token operator">::</span> application start
+set APP_START<span class="token operator">=</span><span class="token number">0x0000</span>
+
+<span class="token operator">::</span> checksum calculate <span class="token function">end</span> <span class="token punctuation">(</span>exclude checksum field<span class="token punctuation">)</span>
+set APP_CRC_END<span class="token operator">=</span><span class="token number">0x1DFFC</span>
+
+<span class="token operator">::</span> checksum field start
+set CRC_POS<span class="token operator">=</span><span class="token number">0x1DFFC</span>
+
+<span class="token operator">::</span> checksum field <span class="token function">size</span> <span class="token punctuation">(</span>CRC32 <span class="token operator">=</span> <span class="token number">4</span> bytes<span class="token punctuation">)</span>
+set CRC_SIZE<span class="token operator">=</span><span class="token number">0x0004</span>
+
+<span class="token operator">::</span> checksum field end
+set CRC_END<span class="token operator">=</span><span class="token number">0x1E000</span>
+
+</code></pre><p><strong>checksum_config.cmd</strong></p>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code><span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">input</span> <span class="token expression">binary</span></span>
+obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary
+
+<span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">keep</span> <span class="token expression">code area <span class="token keyword keyword-for">for</span> CRC calculation</span></span>
+<span class="token operator">-</span>crop <span class="token operator">%</span>APP_START<span class="token operator">%</span> <span class="token operator">%</span>APP_CRC_END<span class="token operator">%</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">fill</span> <span class="token expression">unused area with <span class="token number">0xFF</span></span></span>
+<span class="token operator">-</span>fill <span class="token number">0xFF</span> <span class="token operator">%</span>APP_START<span class="token operator">%</span> <span class="token operator">%</span>APP_CRC_END<span class="token operator">%</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">calculate</span> <span class="token expression"><span class="token function">CRC32</span> <span class="token punctuation">(</span>little<span class="token operator">-</span>endian<span class="token punctuation">)</span> and place at CRC_POS</span></span>
+<span class="token operator">-</span>crc32<span class="token operator">-</span>l<span class="token operator">-</span>e <span class="token operator">%</span>CRC_POS<span class="token operator">%</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">keep</span> <span class="token expression">only checksum field</span></span>
+<span class="token operator">-</span>crop <span class="token operator">%</span>CRC_POS<span class="token operator">%</span> <span class="token operator">%</span>CRC_END<span class="token operator">%</span>
+
+</code></pre><p><a href="#article_top">back to top</a></p>
+<hr>
+
+      </div>
+      <div class="md-sidebar-toc">
+<div class="md-toc">
+<details style="padding:0;;padding-left:0px;" open="">
+        <summary class="md-toc-link-wrapper">
+          <a href="#nuvoton-m2a23--uart-isp-training-custom-flow" class="md-toc-link"><p>Nuvoton M2A23 – UART ISP Training Custom Flow</p>
+</a>
+          </summary>
+        <div>
+          <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#reference-project" class="md-toc-link">
+            <p>Reference Project</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#agenda" class="md-toc-link">
+            <p>Agenda</p>
+
+          </a></div><details style="padding:0;;padding-left:24px;" open="">
+        <summary class="md-toc-link-wrapper">
+          <a href="#1-system-overview" class="md-toc-link"><ol>
+<li>System overview</li>
+</ol>
+</a>
+          </summary>
+        <div>
+          <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#flash-allocation-actual-project" class="md-toc-link">
+            <p>Flash allocation actual project</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#uart-assignment-hard-separation" class="md-toc-link">
+            <p>UART assignment hard separation</p>
+
+          </a></div>
+        </div>
+      </details>
+    <details style="padding:0;;padding-left:24px;" open="">
+        <summary class="md-toc-link-wrapper">
+          <a href="#2-boot-code-flow-ldrom--aprom-end" class="md-toc-link"><ol start="2">
+<li>Boot code flow LDROM + APROM-end</li>
+</ol>
+</a>
+          </summary>
+        <div>
+          <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#source-level-structure-important" class="md-toc-link">
+            <p>Source-level structure important</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#boot-code-flow" class="md-toc-link">
+            <p>Boot code flow</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#key-point-training-emphasis" class="md-toc-link">
+            <p>Key point training emphasis</p>
+
+          </a></div>
+        </div>
+      </details>
+    <details style="padding:0;;padding-left:24px;" open="">
+        <summary class="md-toc-link-wrapper">
+          <a href="#3-application-code-flow" class="md-toc-link"><ol start="3">
+<li>Application code flow</li>
+</ol>
+</a>
+          </summary>
+        <div>
+          <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#practical-triggers-from-reference" class="md-toc-link">
+            <p>Practical triggers from reference</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#scatter-file-in-boot-code-uart_iapsct--must-use-as-is" class="md-toc-link">
+            <p>Scatter file in Boot code (uart_iap.sct – MUST use as-is)</p>
+
+          </a></div>
+        </div>
+      </details>
+    <details style="padding:0;;padding-left:24px;" open="">
+        <summary class="md-toc-link-wrapper">
+          <a href="#4-build--image-generation" class="md-toc-link"><ol start="4">
+<li>Build &amp; image generation</li>
+</ol>
+</a>
+          </summary>
+        <div>
+          <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#keil-targets-recommended" class="md-toc-link">
+            <p>Keil targets recommended</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#scatter-file-for-boot-code" class="md-toc-link">
+            <p>Scatter file for boot code</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#checksum-strategy-actual-project" class="md-toc-link">
+            <p>Checksum strategy actual project</p>
+
+          </a></div>
+        </div>
+      </details>
+    <details style="padding:0;;padding-left:24px;" open="">
+        <summary class="md-toc-link-wrapper">
+          <a href="#5-tool-settings" class="md-toc-link"><ol start="5">
+<li>Tool settings</li>
+</ol>
+</a>
+          </summary>
+        <div>
+          <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#icp-tool-mandatory-first-step" class="md-toc-link">
+            <p>ICP tool mandatory first step</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#isp-tool-uart" class="md-toc-link">
+            <p>ISP tool UART</p>
+
+          </a></div>
+        </div>
+      </details>
+    <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#6-uart-log--progress-bar" class="md-toc-link">
+            <ol start="6">
+<li>UART log &amp; progress bar</li>
+</ol>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#7-summary-training-takeaway" class="md-toc-link">
+            <ol start="7">
+<li>Summary training takeaway</li>
+</ol>
+
+          </a></div>
+        </div>
+      </details>
+    <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
+          <a href="#appendix-extended-build--tool-details" class="md-toc-link">
+            <p>Appendix: Extended Build / Tool Details</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
+          <a href="#agenda-1" class="md-toc-link">
+            <p>Agenda</p>
+
+          </a></div><details style="padding:0;;padding-left:0px;" open="">
+        <summary class="md-toc-link-wrapper">
+          <a href="#boot-code-split-into-2-binaries-ldrom--aprom-end--0x1e000" class="md-toc-link"><p>Boot code: split into 2 binaries LDROM + APROM end @ 0x1E000</p>
+</a>
+          </summary>
+        <div>
+          <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#why-split" class="md-toc-link">
+            <p>Why split?</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#layout-default" class="md-toc-link">
+            <p>layout default</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#output-artifacts" class="md-toc-link">
+            <p>output artifacts</p>
+
+          </a></div>
+        </div>
+      </details>
+    <details style="padding:0;;padding-left:0px;" open="">
+        <summary class="md-toc-link-wrapper">
+          <a href="#isp-tool-settings-uart-isp-update" class="md-toc-link"><p>ISP tool settings UART ISP update</p>
+</a>
+          </summary>
+        <div>
+          <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#typical-steps-uart" class="md-toc-link">
+            <p>Typical steps UART</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#notes" class="md-toc-link">
+            <p>Notes</p>
+
+          </a></div>
+        </div>
+      </details>
+    <details style="padding:0;;padding-left:0px;" open="">
+        <summary class="md-toc-link-wrapper">
+          <a href="#srecord-settings-merge--crc32-append" class="md-toc-link"><p>SRecord settings merge + CRC32 append</p>
+</a>
+          </summary>
+        <div>
+          <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#use-cases" class="md-toc-link">
+            <p>Use cases</p>
+
+          </a></div>
+        </div>
+      </details>
+    
+</div>
+</div>
+      <a id="sidebar-toc-btn">≡</a>
+    
+    
+    <script type="module">
+// TODO: If ZenUML gets integrated into mermaid in the future,
+//      we can remove the following lines.
+
+
+var MERMAID_CONFIG = ({"startOnLoad":false});
+if (typeof MERMAID_CONFIG !== 'undefined') {
+  MERMAID_CONFIG.startOnLoad = false
+  MERMAID_CONFIG.cloneCssStyles = false
+  MERMAID_CONFIG.theme = "default"
+}
+
+mermaid.initialize(MERMAID_CONFIG || {})
+if (typeof(window['Reveal']) !== 'undefined') {
+  function mermaidRevealHelper(event) {
+    var currentSlide = event.currentSlide
+    var diagrams = currentSlide.querySelectorAll('.mermaid')
+    for (var i = 0; i < diagrams.length; i++) {
+      var diagram = diagrams[i]
+      if (!diagram.hasAttribute('data-processed')) {
+        mermaid.init(null, diagram, ()=> {
+          Reveal.slide(event.indexh, event.indexv)
+        })
+      }
+    }
+  }
+  Reveal.addEventListener('slidetransitionend', mermaidRevealHelper)
+  Reveal.addEventListener('ready', mermaidRevealHelper)
+  await mermaid.run({
+    nodes: document.querySelectorAll('.mermaid')
+  })
+} else {
+  await mermaid.run({
+    nodes: document.querySelectorAll('.mermaid')
+  })
+}
+</script>
+    
+    
+    
+<script>
+
+var sidebarTOCBtn = document.getElementById('sidebar-toc-btn')
+sidebarTOCBtn.addEventListener('click', function(event) {
+  event.stopPropagation()
+  if (document.body.hasAttribute('html-show-sidebar-toc')) {
+    document.body.removeAttribute('html-show-sidebar-toc')
+  } else {
+    document.body.setAttribute('html-show-sidebar-toc', true)
+  }
+})
+</script>
+      
+  
+    </body></html>
