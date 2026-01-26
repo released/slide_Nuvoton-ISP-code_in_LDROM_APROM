@@ -45,7 +45,7 @@ All memory layout, ISP flow, CRC strategy, and tool settings described below are
 > - `APROM Boot extension` base address example: `0x1E000`  
 >
 > These addresses are **project-dependent** and **NOT fixed by hardware**.  
-> **must** adjust them according to:
+> **adjust them** according to:
 > - Application code size requirement
 > - Bootloader code feature size
 >
@@ -72,7 +72,7 @@ All memory layout, ISP flow, CRC strategy, and tool settings described below are
 
 <a id="article_boot_flow"></a>
 
-## 2. Boot code flow LDROM + APROM-end
+## 2. Boot code flow (LDROM + APROM-end)
 
 ### Source-level structure important
 
@@ -110,6 +110,10 @@ flowchart TD
     K-->|FINISH : CMD_RUN_APROM| N[SYS_ResetChip restart boot]
 ```
 
+ 1. Verify app CRC32 APROM (FAIL)
+ 2. Verify app CRC32 APROM (OK) 
+ 3. successful entry app code
+
 ![](img/LDROM_upgrade_finish.jpg)
 
 
@@ -128,7 +132,8 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A[App Reset Vector @ 0x0000_0000] --> B[System init peripherals, tasks]
+    A[App Reset Vector @ 0x0000_0000] --> B[System init
+    peripherals init]
     B --> C[Normal run]
     C --> D{Enter update mode? button/command/flag}
     D -->|Yes| E[Erase checksum @ 0x1DFFC]
@@ -140,17 +145,17 @@ flowchart TD
 
 ### Practical triggers from reference
 
-* Press **'1'** → erase checksum (under app code)
+* Press **'1'** by terminal → erase checksum (under app code)
 
 ![](img/APROM_erase_checksum.jpg)
 
 
-* Press **'Z' / 'z'** → reset to LDROM
+* Press **'Z' / 'z'** by terminal → reset to LDROM (under app code)
 
 ![](img/APROM_press_Z_to_LDROM.jpg)
 
 
-* Press **nRESET** on EVM
+* Press **nRESET** PIN on EVM (boot from boot code to app code)
 
 ![](img/APROM_press_nRESET_to_LDROM.jpg)
 
@@ -159,7 +164,7 @@ flowchart TD
 <a id="article_build"></a>
 
 
-### Scatter file in Boot code (uart_iap.sct – MUST use as-is)
+### Scatter file in Boot code
 
 Boot code project **uses a single scatter file**: `uart_iap.sct`.
 
@@ -168,9 +173,6 @@ Boot code project **uses a single scatter file**: `uart_iap.sct`.
 The linker layout for:
 - LDROM
 - APROM boot extension
-
-is **centrally defined in `uart_iap.sct`** to guarantee consistency between
-bootloader and application images.
 
 ![](img/LDROM_KEIL_sct.jpg)
 
@@ -222,7 +224,7 @@ LOAD_ROM_2  0x1E000 0x2000
 
 ## 5. Tool settings
 
-### ICP tool mandatory first step
+### ICP tool mandatory (programming boot code)
 
 * Program:
   * `LDROM_Bootloader.bin` → LDROM
@@ -235,16 +237,35 @@ LOAD_ROM_2  0x1E000 0x2000
 
 ![](img/LDROM_ICP_Config.jpg)
 
-### ISP tool UART
+### ISP tool settings UART ISP update (programming app code)
 
-* **UART COM PORT**
-* Select **APROM** and **Reset & Run**
-* During update:
-  * Progress bar shown on UART1
-  * ISP protocol on UART0 only
+* Connect ISP UART UART0 (target PCB) to PC USB-to-UART (UART bride)
+* Open ISP tool (SW)
+
+1. Select UART port & baud rate
+2. Click “Connect” ( if MCU under boot mode , will stay with connected)
+3. Load image:
+   * APROM: load `APROM_application.bin`
+4. Select `APROM`
+5. Select `Reset and Run`
+6. execute Program `Start`
+
+![](img/ISP_connect.jpg)
+
+7. under ISP code tool , during upgrade application code
+
+![](img/ISP_during_update.jpg)
+
+8. under boot code , during upgrade application code
+
+![](img/LDROM_during_upgrade.jpg)
 
 
-![](img/boot_from_LDROM_to_APROM.jpg)
+## Notes
+
+* Bootloader may have a timeout window; connect sequence matters.
+* After update, ensure CRC word is correct; otherwise boot will stay in ISP.
+
 
 ---
 
@@ -289,7 +310,6 @@ Progress bar width=10:
 # Agenda
 
 * Boot code in LDROM,APROM image generation
-* ISP tool operation
 * SRecord post-build merge + CRC32
 
 ---
@@ -322,40 +342,6 @@ Progress bar width=10:
 
 ---
 
-<a id="article_isp_tool"></a>
-
-# ISP tool settings UART ISP update
-
-## Typical steps UART
-
-Connect ISP UART UART0 (target PCB) to PC USB-to-UART (UART bride) , Open ISP tool (SW)
-1. Select UART port & baud rate
-2. Click “Connect” ( if MCU under boot mode , will stay with connected)
-3. Load image:
-   * APROM: load `APROM_application.bin`
-4. Select `APROM`
-5. Select `Reset and Run`
-6. execute Program `Start`
-
-![](img/ISP_connect.jpg)
-
-7. under ISP code tool , during upgrade application code
-
-![](img/ISP_during_update.jpg)
-
-8. under boot code , during upgrade application code
-
-![](img/LDROM_during_upgrade.jpg)
-
-## Notes
-
-* Bootloader may have a timeout window; connect sequence matters.
-* After update, ensure CRC word is correct; otherwise boot will stay in ISP.
-
-[back to top](#article_top)
-
----
-
 <a id="article_srecord"></a>
 
 # SRecord settings merge + CRC32 append
@@ -375,11 +361,16 @@ Connect ISP UART UART0 (target PCB) to PC USB-to-UART (UART bride) , Open ISP to
 setlocal EnableDelayedExpansion
 
 :: MODIFY checksum_config.cmd only
+:: 載入位址設定（APP 起始、CRC 位置等）
+:: 只在 batch 階段使用
 call checksum_config.cmd
 
 :: DO NOT EDIT checksum_flow_gen.cmd
 :: It is auto-generated every build
 :: generate srec script with expanded values
+:: 將「位址已展開的數值」
+:: 寫成一個 srec_cat 可直接解析的指令檔
+:: 避免 %VAR% 無法被 srec_cat 解讀的問題
 (
 echo obj\APROM_application.bin -binary
 echo -crop %APP_START% %APP_CRC_END%
@@ -389,21 +380,28 @@ echo -crop %CRC_POS% %CRC_END%
 ) > checksum_flow_gen.cmd
 
 :: dump checksum
+:: 執行 checksum 計算流程
+:: 以 HEX dump 方式輸出到 console
+:: 用於人工確認 CRC 值
 srec_cat @checksum_flow_gen.cmd -Output - -HEX_Dump
 
 :: update binary
+:: 將計算後的 checksum
+:: 寫回原本的 APROM_application.bin
+:: 產生「已帶 CRC 的最終 binary」
 srec_cat @checksum_flow_gen.cmd ^
     obj\APROM_application.bin -binary ^
     -fill 0xFF %APP_START% %APP_CRC_END% ^
     -Output obj\APROM_application.bin -binary
 
 :: generate hex
+:: 將最終 binary 轉成 Intel HEX 格式供燒錄或後續工具使用
 srec_cat obj\APROM_application.bin -binary ^
     -Output obj\APROM_application.hex -intel
 
 ```
 
-**checksum_flow.cmd** ==(the only file need to modify)==
+**checksum_config.cmd** ==(the only file need to modify)==
 ```c
 :: ===== Application layout configuration =====
 
@@ -421,26 +419,6 @@ set CRC_SIZE=0x0004
 
 :: checksum field end
 set CRC_END=0x1E000
-
-```
-
-
-**checksum_config.cmd**
-```c
-# input binary
-obj\APROM_application.bin -binary
-
-# keep code area for CRC calculation
--crop %APP_START% %APP_CRC_END%
-
-# fill unused area with 0xFF
--fill 0xFF %APP_START% %APP_CRC_END%
-
-# calculate CRC32 (little-endian) and place at CRC_POS
--crc32-l-e %CRC_POS%
-
-# keep only checksum field
--crop %CRC_POS% %CRC_END%
 
 ```
 

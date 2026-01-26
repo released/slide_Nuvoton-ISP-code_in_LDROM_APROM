@@ -60,7 +60,7 @@
 <li><code>APROM Boot extension</code> base address example: <code>0x1E000</code></li>
 </ul>
 <p>These addresses are <strong>project-dependent</strong> and <strong>NOT fixed by hardware</strong>.<br>
-<strong>must</strong> adjust them according to:</p>
+<strong>adjust them</strong> according to:</p>
 <ul>
 <li>Application code size requirement</li>
 <li>Bootloader code feature size</li>
@@ -128,7 +128,7 @@
 </table>
 <hr>
 <p><a id="article_boot_flow" href=""></a></p>
-<h2 id="2-boot-code-flow-ldrom--aprom-end">2. Boot code flow LDROM + APROM-end </h2>
+<h2 id="2-boot-code-flow-ldrom--aprom-end">2. Boot code flow (LDROM + APROM-end) </h2>
 <h3 id="source-level-structure-important">Source-level structure important </h3>
 <pre data-role="codeBlock" data-info="" class="language-text"><code>main.c
  └─ main
@@ -157,7 +157,12 @@ isp_user.c     ← UART RX / CMD handler
     L --&gt; M[Update progress by UART1 log]
     M --&gt; H    
     K--&gt;|FINISH : CMD_RUN_APROM| N[SYS_ResetChip restart boot]
-</div><p><img src="img/LDROM_upgrade_finish.jpg" alt=""></p>
+</div><ol>
+<li>Verify app CRC32 APROM (FAIL)</li>
+<li>Verify app CRC32 APROM (OK)</li>
+<li>successful entry app code</li>
+</ol>
+<p><img src="img/LDROM_upgrade_finish.jpg" alt=""></p>
 <h3 id="key-point-training-emphasis">Key point training emphasis </h3>
 <ul>
 <li><strong>Protocol parsing and policy are separated</strong>
@@ -172,7 +177,8 @@ isp_user.c     ← UART RX / CMD handler
 <p><a id="article_app_flow" href=""></a></p>
 <h2 id="3-application-code-flow">3. Application code flow </h2>
 <div class="mermaid">flowchart TD
-    A[App Reset Vector @ 0x0000_0000] --&gt; B[System init peripherals, tasks]
+    A[App Reset Vector @ 0x0000_0000] --&gt; B[System init
+    peripherals init]
     B --&gt; C[Normal run]
     C --&gt; D{Enter update mode? button/command/flag}
     D --&gt;|Yes| E[Erase checksum @ 0x1DFFC]
@@ -182,20 +188,20 @@ isp_user.c     ← UART RX / CMD handler
     compare checksum CRC FAIL → ISP mode]
 </div><h3 id="practical-triggers-from-reference">Practical triggers from reference </h3>
 <ul>
-<li>Press <strong>'1'</strong> → erase checksum (under app code)</li>
+<li>Press <strong>'1'</strong> by terminal → erase checksum (under app code)</li>
 </ul>
 <p><img src="img/APROM_erase_checksum.jpg" alt=""></p>
 <ul>
-<li>Press <strong>'Z' / 'z'</strong> → reset to LDROM</li>
+<li>Press <strong>'Z' / 'z'</strong> by terminal → reset to LDROM (under app code)</li>
 </ul>
 <p><img src="img/APROM_press_Z_to_LDROM.jpg" alt=""></p>
 <ul>
-<li>Press <strong>nRESET</strong> on EVM</li>
+<li>Press <strong>nRESET</strong> PIN on EVM (boot from boot code to app code)</li>
 </ul>
 <p><img src="img/APROM_press_nRESET_to_LDROM.jpg" alt=""></p>
 <hr>
 <p><a id="article_build" href=""></a></p>
-<h3 id="scatter-file-in-boot-code-uart_iapsct--must-use-as-is">Scatter file in Boot code (uart_iap.sct – MUST use as-is) </h3>
+<h3 id="scatter-file-in-boot-code">Scatter file in Boot code </h3>
 <p>Boot code project <strong>uses a single scatter file</strong>: <code>uart_iap.sct</code>.</p>
 <ul>
 <li>Adjust <strong>only the address/size macros</strong> if project memory layout changes</li>
@@ -205,8 +211,6 @@ isp_user.c     ← UART RX / CMD handler
 <li>LDROM</li>
 <li>APROM boot extension</li>
 </ul>
-<p>is <strong>centrally defined in <code>uart_iap.sct</code></strong> to guarantee consistency between<br>
-bootloader and application images.</p>
 <p><img src="img/LDROM_KEIL_sct.jpg" alt=""></p>
 <h2 id="4-build--image-generation">4. Build &amp; image generation </h2>
 <h3 id="keil-targets-recommended">Keil targets recommended </h3>
@@ -259,7 +263,7 @@ LOAD_ROM_2  <span class="token number">0x1E000</span> <span class="token number"
 <hr>
 <p><a id="article_tools" href=""></a></p>
 <h2 id="5-tool-settings">5. Tool settings </h2>
-<h3 id="icp-tool-mandatory-first-step">ICP tool mandatory first step </h3>
+<h3 id="icp-tool-mandatory-programming-boot-code">ICP tool mandatory (programming boot code) </h3>
 <ul>
 <li>Program:
 <ul>
@@ -277,18 +281,37 @@ LOAD_ROM_2  <span class="token number">0x1E000</span> <span class="token number"
 </li>
 </ul>
 <p><img src="img/LDROM_ICP_Config.jpg" alt=""></p>
-<h3 id="isp-tool-uart">ISP tool UART </h3>
+<h3 id="isp-tool-settings-uart-isp-update-programming-app-code">ISP tool settings UART ISP update (programming app code) </h3>
 <ul>
-<li><strong>UART COM PORT</strong></li>
-<li>Select <strong>APROM</strong> and <strong>Reset &amp; Run</strong></li>
-<li>During update:
+<li>Connect ISP UART UART0 (target PCB) to PC USB-to-UART (UART bride)</li>
+<li>Open ISP tool (SW)</li>
+</ul>
+<ol>
+<li>Select UART port &amp; baud rate</li>
+<li>Click “Connect” ( if MCU under boot mode , will stay with connected)</li>
+<li>Load image:
 <ul>
-<li>Progress bar shown on UART1</li>
-<li>ISP protocol on UART0 only</li>
+<li>APROM: load <code>APROM_application.bin</code></li>
 </ul>
 </li>
+<li>Select <code>APROM</code></li>
+<li>Select <code>Reset and Run</code></li>
+<li>execute Program <code>Start</code></li>
+</ol>
+<p><img src="img/ISP_connect.jpg" alt=""></p>
+<ol start="7">
+<li>under ISP code tool , during upgrade application code</li>
+</ol>
+<p><img src="img/ISP_during_update.jpg" alt=""></p>
+<ol start="8">
+<li>under boot code , during upgrade application code</li>
+</ol>
+<p><img src="img/LDROM_during_upgrade.jpg" alt=""></p>
+<h2 id="notes">Notes </h2>
+<ul>
+<li>Bootloader may have a timeout window; connect sequence matters.</li>
+<li>After update, ensure CRC word is correct; otherwise boot will stay in ISP.</li>
 </ul>
-<p><img src="img/boot_from_LDROM_to_APROM.jpg" alt=""></p>
 <hr>
 <p><a id="article_log" href=""></a></p>
 <h2 id="6-uart-log--progress-bar">6. UART log &amp; progress bar </h2>
@@ -317,7 +340,6 @@ LOAD_ROM_2  <span class="token number">0x1E000</span> <span class="token number"
 <h1 id="agenda-1">Agenda </h1>
 <ul>
 <li>Boot code in LDROM,APROM image generation</li>
-<li>ISP tool operation</li>
 <li>SRecord post-build merge + CRC32</li>
 </ul>
 <hr>
@@ -346,38 +368,6 @@ LOAD_ROM_2  <span class="token number">0x1E000</span> <span class="token number"
 <p><img src="img/APROM_KEIL_output_file.jpg" alt=""></p>
 <p><a href="#article_top">back to top</a></p>
 <hr>
-<p><a id="article_isp_tool" href=""></a></p>
-<h1 id="isp-tool-settings-uart-isp-update">ISP tool settings UART ISP update </h1>
-<h2 id="typical-steps-uart">Typical steps UART </h2>
-<p>Connect ISP UART UART0 (target PCB) to PC USB-to-UART (UART bride) , Open ISP tool (SW)</p>
-<ol>
-<li>Select UART port &amp; baud rate</li>
-<li>Click “Connect” ( if MCU under boot mode , will stay with connected)</li>
-<li>Load image:
-<ul>
-<li>APROM: load <code>APROM_application.bin</code></li>
-</ul>
-</li>
-<li>Select <code>APROM</code></li>
-<li>Select <code>Reset and Run</code></li>
-<li>execute Program <code>Start</code></li>
-</ol>
-<p><img src="img/ISP_connect.jpg" alt=""></p>
-<ol start="7">
-<li>under ISP code tool , during upgrade application code</li>
-</ol>
-<p><img src="img/ISP_during_update.jpg" alt=""></p>
-<ol start="8">
-<li>under boot code , during upgrade application code</li>
-</ol>
-<p><img src="img/LDROM_during_upgrade.jpg" alt=""></p>
-<h2 id="notes">Notes </h2>
-<ul>
-<li>Bootloader may have a timeout window; connect sequence matters.</li>
-<li>After update, ensure CRC word is correct; otherwise boot will stay in ISP.</li>
-</ul>
-<p><a href="#article_top">back to top</a></p>
-<hr>
 <p><a id="article_srecord" href=""></a></p>
 <h1 id="srecord-settings-merge--crc32-append">SRecord settings merge + CRC32 append </h1>
 <h2 id="use-cases">Use cases </h2>
@@ -392,11 +382,16 @@ LOAD_ROM_2  <span class="token number">0x1E000</span> <span class="token number"
 setlocal EnableDelayedExpansion
 
 <span class="token operator">::</span> MODIFY checksum_config<span class="token punctuation">.</span>cmd only
+<span class="token operator">::</span> 載入位址設定（APP 起始、CRC 位置等）
+<span class="token operator">::</span> 只在 batch 階段使用
 call checksum_config<span class="token punctuation">.</span>cmd
 
 <span class="token operator">::</span> DO NOT EDIT checksum_flow_gen<span class="token punctuation">.</span>cmd
 <span class="token operator">::</span> It is <span class="token keyword keyword-auto">auto</span><span class="token operator">-</span>generated every build
-<span class="token operator">::</span> generate srec script with expanded <span class="token function">values</span>
+<span class="token operator">::</span> generate srec script with expanded values
+<span class="token operator">::</span> 將「位址已展開的數值」
+<span class="token operator">::</span> 寫成一個 srec_cat 可直接解析的指令檔
+<span class="token operator">::</span> 避免 <span class="token operator">%</span>VAR<span class="token operator">%</span> 無法被 srec_cat 解讀的問題
 <span class="token punctuation">(</span>
 echo obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary
 echo <span class="token operator">-</span>crop <span class="token operator">%</span>APP_START<span class="token operator">%</span> <span class="token operator">%</span>APP_CRC_END<span class="token operator">%</span>
@@ -406,19 +401,26 @@ echo <span class="token operator">-</span>crop <span class="token operator">%</s
 <span class="token punctuation">)</span> <span class="token operator">&gt;</span> checksum_flow_gen<span class="token punctuation">.</span>cmd
 
 <span class="token operator">::</span> dump checksum
+<span class="token operator">::</span> 執行 checksum 計算流程
+<span class="token operator">::</span> 以 HEX dump 方式輸出到 console
+<span class="token operator">::</span> 用於人工確認 CRC 值
 srec_cat @checksum_flow_gen<span class="token punctuation">.</span>cmd <span class="token operator">-</span>Output <span class="token operator">-</span> <span class="token operator">-</span>HEX_Dump
 
 <span class="token operator">::</span> update binary
+<span class="token operator">::</span> 將計算後的 checksum
+<span class="token operator">::</span> 寫回原本的 APROM_application<span class="token punctuation">.</span>bin
+<span class="token operator">::</span> 產生「已帶 CRC 的最終 binary」
 srec_cat @checksum_flow_gen<span class="token punctuation">.</span>cmd <span class="token operator">^</span>
     obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary <span class="token operator">^</span>
     <span class="token operator">-</span>fill <span class="token number">0xFF</span> <span class="token operator">%</span>APP_START<span class="token operator">%</span> <span class="token operator">%</span>APP_CRC_END<span class="token operator">%</span> <span class="token operator">^</span>
     <span class="token operator">-</span>Output obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary
 
 <span class="token operator">::</span> generate hex
+<span class="token operator">::</span> 將最終 binary 轉成 Intel HEX 格式供燒錄或後續工具使用
 srec_cat obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary <span class="token operator">^</span>
     <span class="token operator">-</span>Output obj\APROM_application<span class="token punctuation">.</span>hex <span class="token operator">-</span>intel
 
-</code></pre><p><strong>checksum_flow.cmd</strong> <mark>(the only file need to modify)</mark></p>
+</code></pre><p><strong>checksum_config.cmd</strong> <mark>(the only file need to modify)</mark></p>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code><span class="token operator">::</span> <span class="token operator">==</span><span class="token operator">==</span><span class="token operator">=</span> Application layout configuration <span class="token operator">==</span><span class="token operator">==</span><span class="token operator">=</span>
 
 <span class="token operator">::</span> application start
@@ -435,22 +437,6 @@ set CRC_SIZE<span class="token operator">=</span><span class="token number">0x00
 
 <span class="token operator">::</span> checksum field end
 set CRC_END<span class="token operator">=</span><span class="token number">0x1E000</span>
-
-</code></pre><p><strong>checksum_config.cmd</strong></p>
-<pre data-role="codeBlock" data-info="c" class="language-c c"><code><span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">input</span> <span class="token expression">binary</span></span>
-obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary
-
-<span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">keep</span> <span class="token expression">code area <span class="token keyword keyword-for">for</span> CRC calculation</span></span>
-<span class="token operator">-</span>crop <span class="token operator">%</span>APP_START<span class="token operator">%</span> <span class="token operator">%</span>APP_CRC_END<span class="token operator">%</span>
-
-<span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">fill</span> <span class="token expression">unused area with <span class="token number">0xFF</span></span></span>
-<span class="token operator">-</span>fill <span class="token number">0xFF</span> <span class="token operator">%</span>APP_START<span class="token operator">%</span> <span class="token operator">%</span>APP_CRC_END<span class="token operator">%</span>
-
-<span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">calculate</span> <span class="token expression"><span class="token function">CRC32</span> <span class="token punctuation">(</span>little<span class="token operator">-</span>endian<span class="token punctuation">)</span> and place at CRC_POS</span></span>
-<span class="token operator">-</span>crc32<span class="token operator">-</span>l<span class="token operator">-</span>e <span class="token operator">%</span>CRC_POS<span class="token operator">%</span>
-
-<span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">keep</span> <span class="token expression">only checksum field</span></span>
-<span class="token operator">-</span>crop <span class="token operator">%</span>CRC_POS<span class="token operator">%</span> <span class="token operator">%</span>CRC_END<span class="token operator">%</span>
 
 </code></pre><p><a href="#article_top">back to top</a></p>
 <hr>
@@ -494,7 +480,7 @@ obj\APROM_application<span class="token punctuation">.</span>bin <span class="to
     <details style="padding:0;;padding-left:24px;" open="">
         <summary class="md-toc-link-wrapper">
           <a href="#2-boot-code-flow-ldrom--aprom-end" class="md-toc-link"><ol start="2">
-<li>Boot code flow LDROM + APROM-end</li>
+<li>Boot code flow (LDROM + APROM-end)</li>
 </ol>
 </a>
           </summary>
@@ -527,8 +513,8 @@ obj\APROM_application<span class="token punctuation">.</span>bin <span class="to
             <p>Practical triggers from reference</p>
 
           </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
-          <a href="#scatter-file-in-boot-code-uart_iapsct--must-use-as-is" class="md-toc-link">
-            <p>Scatter file in Boot code (uart_iap.sct – MUST use as-is)</p>
+          <a href="#scatter-file-in-boot-code" class="md-toc-link">
+            <p>Scatter file in Boot code</p>
 
           </a></div>
         </div>
@@ -565,17 +551,21 @@ obj\APROM_application<span class="token punctuation">.</span>bin <span class="to
           </summary>
         <div>
           <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
-          <a href="#icp-tool-mandatory-first-step" class="md-toc-link">
-            <p>ICP tool mandatory first step</p>
+          <a href="#icp-tool-mandatory-programming-boot-code" class="md-toc-link">
+            <p>ICP tool mandatory (programming boot code)</p>
 
           </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
-          <a href="#isp-tool-uart" class="md-toc-link">
-            <p>ISP tool UART</p>
+          <a href="#isp-tool-settings-uart-isp-update-programming-app-code" class="md-toc-link">
+            <p>ISP tool settings UART ISP update (programming app code)</p>
 
           </a></div>
         </div>
       </details>
     <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#notes" class="md-toc-link">
+            <p>Notes</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
           <a href="#6-uart-log--progress-bar" class="md-toc-link">
             <ol start="6">
 <li>UART log &amp; progress bar</li>
@@ -615,23 +605,6 @@ obj\APROM_application<span class="token punctuation">.</span>bin <span class="to
           </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
           <a href="#output-artifacts" class="md-toc-link">
             <p>output artifacts</p>
-
-          </a></div>
-        </div>
-      </details>
-    <details style="padding:0;;padding-left:0px;" open="">
-        <summary class="md-toc-link-wrapper">
-          <a href="#isp-tool-settings-uart-isp-update" class="md-toc-link"><p>ISP tool settings UART ISP update</p>
-</a>
-          </summary>
-        <div>
-          <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
-          <a href="#typical-steps-uart" class="md-toc-link">
-            <p>Typical steps UART</p>
-
-          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
-          <a href="#notes" class="md-toc-link">
-            <p>Notes</p>
 
           </a></div>
         </div>
