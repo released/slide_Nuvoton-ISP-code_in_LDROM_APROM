@@ -26,19 +26,12 @@
       
 <p><a href="https://released.github.io/">return to index</a></p>
 <p><a id="article_top" href=""></a></p>
-<h1 id="nuvoton-m2a23--uart-isp-training-custom-flow">Nuvoton M2A23 – UART ISP Training Custom Flow </h1>
-<blockquote>
-<p>This training material is written <strong>to match the actual reference project</strong><br>
-<strong>M2A23BSP_ISP_UART_APROM</strong>, including its <strong>custom ISP flow split into <code>isp_config.c</code></strong>.</p>
-</blockquote>
-<hr>
+<h1 id="nuvoton-m2a23--uart-isp-code-custom-flow">Nuvoton M2A23 – UART ISP code custom flow </h1>
 <h2 id="reference-project">Reference Project </h2>
 <p>This training material is based on the <strong>below reference project</strong>:</p>
 <ul>
 <li><a href="https://github.com/released/M2A23BSP_ISP_UART_APROM">https://github.com/released/M2A23BSP_ISP_UART_APROM</a></li>
 </ul>
-<p>All memory layout, ISP flow, CRC strategy, and tool settings described below are<br>
-<strong>directly derived from this repository</strong>.</p>
 <h2 id="agenda">Agenda </h2>
 <ul>
 <li>System overview Flash layout + dual UART</li>
@@ -59,13 +52,12 @@
 <li><code>APROM Application</code> start / size</li>
 <li><code>APROM Boot extension</code> base address example: <code>0x1E000</code></li>
 </ul>
-<p>These addresses are <strong>project-dependent</strong> and <strong>NOT fixed by hardware</strong>.<br>
-<strong>adjust them</strong> according to:</p>
+<p>These addresses are <strong>project-dependent</strong> and <strong>NOT fixed by hardware</strong> , <strong>adjust them</strong> according to:</p>
 <ul>
-<li>Application code size requirement</li>
-<li>Bootloader code feature size</li>
+<li>actual project application code size requirement</li>
+<li>actual project boot code feature size</li>
 </ul>
-<p>The values used in this training <code>0x1E000</code>, <code>0x1DFFC</code> are <strong>one validated reference only</strong>.</p>
+<p>The values used in this project <code>0x1E000</code>, <code>0x1DFFC</code>are <strong>one validated reference only</strong>.</p>
 </blockquote>
 <table>
 <thead>
@@ -96,7 +88,7 @@
 <td>boot code extension</td>
 </tr>
 <tr>
-<td>Boot code inLDROM</td>
+<td>Boot code in LDROM</td>
 <td><code>0x0010_0000 ~ 0x0010_0FFF</code></td>
 <td>4 KB</td>
 <td>boot code</td>
@@ -128,7 +120,7 @@
 </table>
 <hr>
 <p><a id="article_boot_flow" href=""></a></p>
-<h2 id="2-boot-code-flow-ldrom--aprom-end">2. Boot code flow (LDROM + APROM-end) </h2>
+<h2 id="2-boot-code-flow-ldrom--end-of-aprom">2. Boot code flow (LDROM + end of APROM) </h2>
 <h3 id="source-level-structure-important">Source-level structure important </h3>
 <pre data-role="codeBlock" data-info="" class="language-text"><code>main.c
  └─ main
@@ -204,7 +196,7 @@ isp_user.c     ← UART RX / CMD handler
 <h3 id="scatter-file-in-boot-code">Scatter file in Boot code </h3>
 <p>Boot code project <strong>uses a single scatter file</strong>: <code>uart_iap.sct</code>.</p>
 <ul>
-<li>Adjust <strong>only the address/size macros</strong> if project memory layout changes</li>
+<li><strong>Modify the address/size macros</strong> if project memory layout changes</li>
 </ul>
 <p>The linker layout for:</p>
 <ul>
@@ -232,7 +224,7 @@ isp_user.c     ← UART RX / CMD handler
 </tr>
 </tbody>
 </table>
-<h3 id="scatter-file-for-boot-code">Scatter file for boot code </h3>
+<h3 id="scatter-file-for-boot-code-uart_iapsct">Scatter file for boot code (uart_iap.sct) </h3>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code>LOAD_ROM_1  <span class="token number">0x100000</span> <span class="token number">0x1000</span>
 <span class="token punctuation">{</span>
 	LDROM_Bootloader<span class="token punctuation">.</span>bin  <span class="token number">0x100000</span> <span class="token number">0x1000</span>
@@ -281,7 +273,7 @@ LOAD_ROM_2  <span class="token number">0x1E000</span> <span class="token number"
 </li>
 </ul>
 <p><img src="img/LDROM_ICP_Config.jpg" alt=""></p>
-<h3 id="isp-tool-settings-uart-isp-update-programming-app-code">ISP tool settings UART ISP update (programming app code) </h3>
+<h3 id="isp-tool-settings-programming-app-code">ISP tool settings (programming app code) </h3>
 <ul>
 <li>Connect ISP UART UART0 (target PCB) to PC USB-to-UART (UART bride)</li>
 <li>Open ISP tool (SW)</li>
@@ -363,6 +355,9 @@ LOAD_ROM_2  <span class="token number">0x1E000</span> <span class="token number"
 <ul>
 <li><code>LDROM_Bootloader.bin</code> boot code stage-1</li>
 <li><code>APROM_Bootloader.bin</code> boot code stage-2, linked at APROM@0x1E000</li>
+</ul>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>refer to uart_iap<span class="token punctuation">.</span>sct
+</code></pre><ul>
 <li><code>APROM_application.bin</code> app code linked at 0x0000_0000, size ≤ 0x1E000, includes CRC word</li>
 </ul>
 <p><img src="img/APROM_KEIL_output_file.jpg" alt=""></p>
@@ -446,7 +441,7 @@ set CRC_END<span class="token operator">=</span><span class="token number">0x1E0
 <div class="md-toc">
 <details style="padding:0;;padding-left:0px;" open="">
         <summary class="md-toc-link-wrapper">
-          <a href="#nuvoton-m2a23--uart-isp-training-custom-flow" class="md-toc-link"><p>Nuvoton M2A23 – UART ISP Training Custom Flow</p>
+          <a href="#nuvoton-m2a23--uart-isp-code-custom-flow" class="md-toc-link"><p>Nuvoton M2A23 – UART ISP code custom flow</p>
 </a>
           </summary>
         <div>
@@ -479,8 +474,8 @@ set CRC_END<span class="token operator">=</span><span class="token number">0x1E0
       </details>
     <details style="padding:0;;padding-left:24px;" open="">
         <summary class="md-toc-link-wrapper">
-          <a href="#2-boot-code-flow-ldrom--aprom-end" class="md-toc-link"><ol start="2">
-<li>Boot code flow (LDROM + APROM-end)</li>
+          <a href="#2-boot-code-flow-ldrom--end-of-aprom" class="md-toc-link"><ol start="2">
+<li>Boot code flow (LDROM + end of APROM)</li>
 </ol>
 </a>
           </summary>
@@ -532,8 +527,8 @@ set CRC_END<span class="token operator">=</span><span class="token number">0x1E0
             <p>Keil targets recommended</p>
 
           </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
-          <a href="#scatter-file-for-boot-code" class="md-toc-link">
-            <p>Scatter file for boot code</p>
+          <a href="#scatter-file-for-boot-code-uart_iapsct" class="md-toc-link">
+            <p>Scatter file for boot code (uart_iap.sct)</p>
 
           </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
           <a href="#checksum-strategy-actual-project" class="md-toc-link">
@@ -555,8 +550,8 @@ set CRC_END<span class="token operator">=</span><span class="token number">0x1E0
             <p>ICP tool mandatory (programming boot code)</p>
 
           </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
-          <a href="#isp-tool-settings-uart-isp-update-programming-app-code" class="md-toc-link">
-            <p>ISP tool settings UART ISP update (programming app code)</p>
+          <a href="#isp-tool-settings-programming-app-code" class="md-toc-link">
+            <p>ISP tool settings (programming app code)</p>
 
           </a></div>
         </div>

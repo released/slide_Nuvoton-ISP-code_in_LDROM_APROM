@@ -2,23 +2,13 @@
 
 <a id="article_top"></a>
 
-# Nuvoton M2A23 – UART ISP Training Custom Flow
-
-> This training material is written **to match the actual reference project**
-> **M2A23BSP_ISP_UART_APROM**, including its **custom ISP flow split into `isp_config.c`**.
->
-
----
-
+# Nuvoton M2A23 – UART ISP code custom flow
 
 ## Reference Project
 
 This training material is based on the **below reference project**:
 
 - https://github.com/released/M2A23BSP_ISP_UART_APROM
-
-All memory layout, ISP flow, CRC strategy, and tool settings described below are
-**directly derived from this repository**.
 
 
 ## Agenda
@@ -44,12 +34,11 @@ All memory layout, ISP flow, CRC strategy, and tool settings described below are
 > - `APROM Application` start / size  
 > - `APROM Boot extension` base address example: `0x1E000`  
 >
-> These addresses are **project-dependent** and **NOT fixed by hardware**.  
-> **adjust them** according to:
-> - Application code size requirement
-> - Bootloader code feature size
+> These addresses are **project-dependent** and **NOT fixed by hardware** , **adjust them** according to:
+> - actual project application code size requirement
+> - actual project boot code feature size
 >
-> The values used in this training `0x1E000`, `0x1DFFC` are **one validated reference only**.
+> The values used in this project `0x1E000`, `0x1DFFC`are **one validated reference only**.
 
 
 | Region | Address | Size | Purpose |
@@ -57,7 +46,7 @@ All memory layout, ISP flow, CRC strategy, and tool settings described below are
 | APROM Application | `0x0000_0000 ~ 0x0001_DFFF` | `0x1E000` | app code |
 | APROM checksum | `0x0001_DFFC` | 4 bytes |app code checksum address (CRC32) |
 | Boot code ext in APROM | `0x0001_E000 ~ 0x0001_FFFF` | 8 KB | boot code extension |
-| Boot code inLDROM | `0x0010_0000 ~ 0x0010_0FFF` | 4 KB | boot code |
+| Boot code in LDROM | `0x0010_0000 ~ 0x0010_0FFF` | 4 KB | boot code |
 
 ![](img/FLASH_calculate.jpg)
 
@@ -72,7 +61,7 @@ All memory layout, ISP flow, CRC strategy, and tool settings described below are
 
 <a id="article_boot_flow"></a>
 
-## 2. Boot code flow (LDROM + APROM-end)
+## 2. Boot code flow (LDROM + end of APROM)
 
 ### Source-level structure important
 
@@ -168,7 +157,7 @@ flowchart TD
 
 Boot code project **uses a single scatter file**: `uart_iap.sct`.
 
-- Adjust **only the address/size macros** if project memory layout changes
+- **Modify the address/size macros** if project memory layout changes
 
 The linker layout for:
 - LDROM
@@ -186,7 +175,7 @@ The linker layout for:
 | LDROM_BOOT | `LDROM_Bootloader.bin` |
 | APROM_BOOT_EXT | `APROM_Bootloader.bin` @ `0x1E000` |
 
-### Scatter file for boot code
+### Scatter file for boot code (uart_iap.sct)
 
 ```c
 LOAD_ROM_1  0x100000 0x1000
@@ -237,7 +226,7 @@ LOAD_ROM_2  0x1E000 0x2000
 
 ![](img/LDROM_ICP_Config.jpg)
 
-### ISP tool settings UART ISP update (programming app code)
+### ISP tool settings (programming app code)
 
 * Connect ISP UART UART0 (target PCB) to PC USB-to-UART (UART bride)
 * Open ISP tool (SW)
@@ -333,6 +322,11 @@ Progress bar width=10:
 
 * `LDROM_Bootloader.bin` boot code stage-1
 * `APROM_Bootloader.bin` boot code stage-2, linked at APROM@0x1E000
+
+```c
+refer to uart_iap.sct
+```
+
 * `APROM_application.bin` app code linked at 0x0000_0000, size ≤ 0x1E000, includes CRC word
 
 ![](img/APROM_KEIL_output_file.jpg)
