@@ -139,7 +139,8 @@ isp_user.c     ← UART RX / CMD handler
     FMC_Open + ISP Enable]
     C --&gt; D[ISP_check_app]
     D --&gt; E{Verify app CRC32 APROM 0..size-4 vs last word}
-    E --&gt;|YES| F[Jump to APROM VECMAP=APROM start CPU reset]
+    E --&gt;|YES| F[Jump to APROM VECMAP=**APROM start** 
+    CPU reset]
     E --&gt;|NO| G[Stay in bootloader]
     G --&gt; H[ISP_process]
     H --&gt; I[CMD_CONNECT?]
@@ -176,8 +177,10 @@ isp_user.c     ← UART RX / CMD handler
     D --&gt;|Yes| E[Erase checksum @ 0x1DFFC]
     D --&gt;|NO|C
     E --&gt; F[SYS_ResetChip]
-    F --&gt; G[return to Boot
-    compare checksum CRC FAIL → ISP mode]
+    F --&gt; G[return to 
+    Boot @ LDROM
+    compare checksum CRC 
+    FAIL → ISP mode]
 </div><h3 id="practical-triggers-from-reference">Practical triggers from reference </h3>
 <ul>
 <li>Press <strong>'1'</strong> by terminal → erase checksum (under app code)</li>
@@ -377,16 +380,15 @@ LOAD_ROM_2  <span class="token number">0x1E000</span> <span class="token number"
 setlocal EnableDelayedExpansion
 
 <span class="token operator">::</span> MODIFY checksum_config<span class="token punctuation">.</span>cmd only
-<span class="token operator">::</span> 載入位址設定（APP 起始、CRC 位置等）
-<span class="token operator">::</span> 只在 batch 階段使用
+<span class="token operator">::</span> Load application layout configuration
+<span class="token operator">::</span> Used only during batch execution
 call checksum_config<span class="token punctuation">.</span>cmd
 
 <span class="token operator">::</span> DO NOT EDIT checksum_flow_gen<span class="token punctuation">.</span>cmd
 <span class="token operator">::</span> It is <span class="token keyword keyword-auto">auto</span><span class="token operator">-</span>generated every build
 <span class="token operator">::</span> generate srec script with expanded values
-<span class="token operator">::</span> 將「位址已展開的數值」
-<span class="token operator">::</span> 寫成一個 srec_cat 可直接解析的指令檔
-<span class="token operator">::</span> 避免 <span class="token operator">%</span>VAR<span class="token operator">%</span> 無法被 srec_cat 解讀的問題
+<span class="token operator">::</span> Generate srec_cat script with expanded numeric values
+<span class="token operator">::</span> Avoids <span class="token operator">%</span>VAR<span class="token operator">%</span> expansion issues in <span class="token function">srec_cat</span>
 <span class="token punctuation">(</span>
 echo obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary
 echo <span class="token operator">-</span>crop <span class="token operator">%</span>APP_START<span class="token operator">%</span> <span class="token operator">%</span>APP_CRC_END<span class="token operator">%</span>
@@ -396,22 +398,22 @@ echo <span class="token operator">-</span>crop <span class="token operator">%</s
 <span class="token punctuation">)</span> <span class="token operator">&gt;</span> checksum_flow_gen<span class="token punctuation">.</span>cmd
 
 <span class="token operator">::</span> dump checksum
-<span class="token operator">::</span> 執行 checksum 計算流程
-<span class="token operator">::</span> 以 HEX dump 方式輸出到 console
-<span class="token operator">::</span> 用於人工確認 CRC 值
+<span class="token operator">::</span> Execute checksum calculation
+<span class="token operator">::</span> Output result as HEX dump to console
+<span class="token operator">::</span> Used <span class="token keyword keyword-for">for</span> verification
 srec_cat @checksum_flow_gen<span class="token punctuation">.</span>cmd <span class="token operator">-</span>Output <span class="token operator">-</span> <span class="token operator">-</span>HEX_Dump
 
 <span class="token operator">::</span> update binary
-<span class="token operator">::</span> 將計算後的 checksum
-<span class="token operator">::</span> 寫回原本的 APROM_application<span class="token punctuation">.</span>bin
-<span class="token operator">::</span> 產生「已帶 CRC 的最終 binary」
+<span class="token operator">::</span> Write calculated checksum back into binary
+<span class="token operator">::</span> Produces final binary with embedded CRC
 srec_cat @checksum_flow_gen<span class="token punctuation">.</span>cmd <span class="token operator">^</span>
     obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary <span class="token operator">^</span>
     <span class="token operator">-</span>fill <span class="token number">0xFF</span> <span class="token operator">%</span>APP_START<span class="token operator">%</span> <span class="token operator">%</span>APP_CRC_END<span class="token operator">%</span> <span class="token operator">^</span>
     <span class="token operator">-</span>Output obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary
 
 <span class="token operator">::</span> generate hex
-<span class="token operator">::</span> 將最終 binary 轉成 Intel HEX 格式供燒錄或後續工具使用
+<span class="token operator">::</span> Convert final binary into Intel HEX format
+<span class="token operator">::</span> Used <span class="token keyword keyword-for">for</span> programming or downstream tools
 srec_cat obj\APROM_application<span class="token punctuation">.</span>bin <span class="token operator">-</span>binary <span class="token operator">^</span>
     <span class="token operator">-</span>Output obj\APROM_application<span class="token punctuation">.</span>hex <span class="token operator">-</span>intel
 

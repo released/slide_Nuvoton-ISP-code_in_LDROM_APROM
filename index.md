@@ -87,7 +87,8 @@ flowchart TD
     FMC_Open + ISP Enable]
     C --> D[ISP_check_app]
     D --> E{Verify app CRC32 APROM 0..size-4 vs last word}
-    E -->|YES| F[Jump to APROM VECMAP=APROM start CPU reset]
+    E -->|YES| F[Jump to APROM VECMAP=**APROM start** 
+    CPU reset]
     E -->|NO| G[Stay in bootloader]
     G --> H[ISP_process]
     H --> I[CMD_CONNECT?]
@@ -128,8 +129,10 @@ flowchart TD
     D -->|Yes| E[Erase checksum @ 0x1DFFC]
     D -->|NO|C
     E --> F[SYS_ResetChip]
-    F --> G[return to Boot
-    compare checksum CRC FAIL → ISP mode]
+    F --> G[return to 
+    Boot @ LDROM
+    compare checksum CRC 
+    FAIL → ISP mode]
 ```
 
 ### Practical triggers from reference
@@ -350,21 +353,19 @@ refer to uart_iap.sct
 **generateChecksum.bat**
 
 ```c
-
 @echo off
 setlocal EnableDelayedExpansion
 
 :: MODIFY checksum_config.cmd only
-:: 載入位址設定（APP 起始、CRC 位置等）
-:: 只在 batch 階段使用
+:: Load application layout configuration
+:: Used only during batch execution
 call checksum_config.cmd
 
 :: DO NOT EDIT checksum_flow_gen.cmd
 :: It is auto-generated every build
 :: generate srec script with expanded values
-:: 將「位址已展開的數值」
-:: 寫成一個 srec_cat 可直接解析的指令檔
-:: 避免 %VAR% 無法被 srec_cat 解讀的問題
+:: Generate srec_cat script with expanded numeric values
+:: Avoids %VAR% expansion issues in srec_cat
 (
 echo obj\APROM_application.bin -binary
 echo -crop %APP_START% %APP_CRC_END%
@@ -374,22 +375,22 @@ echo -crop %CRC_POS% %CRC_END%
 ) > checksum_flow_gen.cmd
 
 :: dump checksum
-:: 執行 checksum 計算流程
-:: 以 HEX dump 方式輸出到 console
-:: 用於人工確認 CRC 值
+:: Execute checksum calculation
+:: Output result as HEX dump to console
+:: Used for verification
 srec_cat @checksum_flow_gen.cmd -Output - -HEX_Dump
 
 :: update binary
-:: 將計算後的 checksum
-:: 寫回原本的 APROM_application.bin
-:: 產生「已帶 CRC 的最終 binary」
+:: Write calculated checksum back into binary
+:: Produces final binary with embedded CRC
 srec_cat @checksum_flow_gen.cmd ^
     obj\APROM_application.bin -binary ^
     -fill 0xFF %APP_START% %APP_CRC_END% ^
     -Output obj\APROM_application.bin -binary
 
 :: generate hex
-:: 將最終 binary 轉成 Intel HEX 格式供燒錄或後續工具使用
+:: Convert final binary into Intel HEX format
+:: Used for programming or downstream tools
 srec_cat obj\APROM_application.bin -binary ^
     -Output obj\APROM_application.hex -intel
 
