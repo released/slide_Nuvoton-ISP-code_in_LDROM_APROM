@@ -8,7 +8,7 @@
 
 This training material is based on the **below reference project**:
 
-- https://github.com/released/M2A23BSP_ISP_UART_APROM
+- [M2A23BSP_ISP_UART_APROM](https://github.com/released/M2A23BSP_ISP_UART_APROM)
 
 
 ## Agenda
