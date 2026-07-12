@@ -6,7 +6,7 @@
 
 > 說明 boot code 分布於 LDROM 與 APROM 尾端時的 UART ISP 架構，包含 Flash layout、雙 UART 分工、映像檔產生、checksum 與 ICP / ISP 工具操作。
 
-## 閱讀重點
+## 內容摘要
 
 - 先確認 LDROM、APROM application 與 APROM-end boot code 的實際位址範圍。
 - 再沿著 boot decision、image transfer、erase、program、verify 與 reset 流程閱讀。
@@ -14,7 +14,7 @@
 
 ## Reference Project
 
-This training material is based on the **below reference project**:
+This page references the following project:
 
 - [M2A23BSP_ISP_UART_APROM](https://github.com/released/M2A23BSP_ISP_UART_APROM)
 
@@ -115,7 +115,7 @@ flowchart TD
 ![](img/LDROM_upgrade_finish.jpg)
 
 
-### Key point training emphasis
+### Implementation points
 
 * **Protocol parsing and policy are separated**
   * `isp_user.c` → packet handling
@@ -291,7 +291,7 @@ Progress bar width=10:
 
 <a id="article_summary"></a>
 
-## 7. Summary training takeaway
+## 7. Summary
 
 * Boot is **policy-driven** `isp_config.c`
 * Application controls update entry by **checksum invalidation**
@@ -320,7 +320,7 @@ Progress bar width=10:
 
 ## Why split?
 
-* **LDROM size is limited** M2A23 LDROM is 4 KB, but training bootloader often needs:
+* **LDROM size is limited** M2A23 LDROM is 4 KB, but a bootloader implementation often needs:
   * protocol + CRC32 + log + timeouts + safety checks
 
 ## layout default
