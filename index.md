@@ -1,8 +1,16 @@
-[return to index](https://released.github.io/)
+[回到知識庫總索引](https://released.github.io/)
 
 <a id="article_top"></a>
 
 # Nuvoton M2A23 – UART ISP code custom flow
+
+> 說明 boot code 分布於 LDROM 與 APROM 尾端時的 UART ISP 架構，包含 Flash layout、雙 UART 分工、映像檔產生、checksum 與 ICP / ISP 工具操作。
+
+## 閱讀重點
+
+- 先確認 LDROM、APROM application 與 APROM-end boot code 的實際位址範圍。
+- 再沿著 boot decision、image transfer、erase、program、verify 與 reset 流程閱讀。
+- 修改 scatter file 或 SRecord 設定後，務必以輸出檔、map file 與實際燒錄結果交叉驗證。
 
 ## Reference Project
 
