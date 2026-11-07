@@ -56,7 +56,7 @@ This page references the following project:
 | Boot code ext in APROM | `0x0001_E000 ~ 0x0001_FFFF` | 8 KB | boot code extension |
 | Boot code in LDROM | `0x0010_0000 ~ 0x0010_0FFF` | 4 KB | boot code |
 
-![](img/FLASH_calculate.jpg)
+![Flash allocation actual project — FLASH calculate](img/FLASH_calculate.jpg)
 
 ### UART assignment hard separation
 
@@ -112,7 +112,7 @@ flowchart TD
  2. Verify app CRC32 APROM (OK) 
  3. successful entry app code
 
-![](img/LDROM_upgrade_finish.jpg)
+![Boot code flow — LDROM upgrade finish](img/LDROM_upgrade_finish.jpg)
 
 
 ### Implementation points
@@ -147,17 +147,17 @@ flowchart TD
 
 * Press **'1'** by terminal → erase checksum (under app code)
 
-![](img/APROM_erase_checksum.jpg)
+![Practical triggers from reference — APROM erase checksum](img/APROM_erase_checksum.jpg)
 
 
 * Press **'Z' / 'z'** by terminal → reset to LDROM (under app code)
 
-![](img/APROM_press_Z_to_LDROM.jpg)
+![Practical triggers from reference — APROM press Z to LDROM](img/APROM_press_Z_to_LDROM.jpg)
 
 
 * Press **nRESET** PIN on EVM (boot from boot code to app code)
 
-![](img/APROM_press_nRESET_to_LDROM.jpg)
+![Practical triggers from reference — APROM press nRESET to LDROM](img/APROM_press_nRESET_to_LDROM.jpg)
 
 ---
 
@@ -174,7 +174,7 @@ The linker layout for:
 - LDROM
 - APROM boot extension
 
-![](img/LDROM_KEIL_sct.jpg)
+![Scatter file in Boot code — LDROM KEIL sct](img/LDROM_KEIL_sct.jpg)
 
 
 ## 4. Build & image generation
@@ -230,12 +230,12 @@ LOAD_ROM_2  0x1E000 0x2000
   * `LDROM_Bootloader.bin` → LDROM
   * `APROM_Bootloader.bin` → APROM @ `0x1E000`
 
-![](img/LDROM_ICP_Update.jpg)
+![ICP tool mandatory (programming boot code) — LDROM ICP Update](img/LDROM_ICP_Update.jpg)
 
 * CONFIG:
   * **Boot from LDROM WITH IAP**
 
-![](img/LDROM_ICP_Config.jpg)
+![ICP tool mandatory (programming boot code) — LDROM ICP Config](img/LDROM_ICP_Config.jpg)
 
 ### ISP tool settings (programming app code)
 
@@ -250,15 +250,15 @@ LOAD_ROM_2  0x1E000 0x2000
 5. Select `Reset and Run`
 6. execute Program `Start`
 
-![](img/ISP_connect.jpg)
+![ISP tool settings (programming app code) — ISP connect](img/ISP_connect.jpg)
 
 7. under ISP code tool , during upgrade application code
 
-![](img/ISP_during_update.jpg)
+![ISP tool settings (programming app code) — ISP during update](img/ISP_during_update.jpg)
 
 8. under boot code , during upgrade application code
 
-![](img/LDROM_during_upgrade.jpg)
+![ISP tool settings (programming app code) — LDROM during upgrade](img/LDROM_during_upgrade.jpg)
 
 
 ## Notes
@@ -296,7 +296,7 @@ Progress bar width=10:
 * Boot is **policy-driven** `isp_config.c`
 * Application controls update entry by **checksum invalidation**
 
-![](img/LDROM_checksum_err.jpg)
+![7. Summary — LDROM checksum err](img/LDROM_checksum_err.jpg)
 
 * Dual UART avoids ISP/log interference
 * CRC32 is the single source of truth for boot decision
@@ -340,7 +340,7 @@ refer to uart_iap.sct
 
 * `APROM_application.bin` app code linked at 0x0000_0000, size ≤ 0x1E000, includes CRC word
 
-![](img/APROM_KEIL_output_file.jpg)
+![output artifacts — APROM KEIL output file](img/APROM_KEIL_output_file.jpg)
 
 
 [back to top](#article_top)
@@ -355,8 +355,8 @@ refer to uart_iap.sct
 
 * Fill holes with 0xFF
 * KEIL setting : after compile , generate checksum with by batch file
-![](img/APROM_KEIL_checksum_calculate.jpg)
-![](img/APROM_SRecord_cmd_file.jpg)
+![Use cases — APROM KEIL checksum calculate](img/APROM_KEIL_checksum_calculate.jpg)
+![Use cases — APROM SRecord cmd file](img/APROM_SRecord_cmd_file.jpg)
 
 **generateChecksum.bat**
 
